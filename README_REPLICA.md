@@ -20,81 +20,70 @@ docker pull mongo:8.0
 docker network create mongo-replica-net
 ```
 
-### 3. Setup hosts
-Add the following entry to /etc/hosts to enable communication with Docker containers:
-```sh
-127.0.0.1 host.docker.internal
-```
-
-### 4. Start MongoDB Containers
+### 3. Start MongoDB Containers
 Run the following commands to start three MongoDB instances as replica set members:
 
 ```sh
 docker run -d --name mongo1 --net mongo-replica-net -p 27017:27017 \
---add-host=host.docker.internal:host-gateway \
 -v mongo1_data:/data/db \
 mongo:8.0 --replSet rs0 --bind_ip_all --port 27017
 ```
 ```sh
 docker run -d --name mongo2 --net mongo-replica-net -p 27018:27018 \
---add-host=host.docker.internal:host-gateway \
 -v mongo2_data:/data/db \
 mongo:8.0 --replSet rs0 --bind_ip_all --port 27018
 ```
 ```sh
 docker run -d --name mongo3 --net mongo-replica-net -p 27019:27019 \
---add-host=host.docker.internal:host-gateway \
 -v mongo3_data:/data/db \
 mongo:8.0 --replSet rs0 --bind_ip_all --port 27019
 ```
 
-### 5. Initialize the Replica Set
+### 4. Check Replica Set Status
 Connect to the primary MongoDB instance and initiate the replica set:
 ```sh
-docker exec -it mongo1 mongosh --port 27017
+docker exec -it mongo1 mongosh --host mongo1 --port 27017
 ```
-```sh
-rs.initiate({
-    _id: "rs0",
-    members: [
-        { _id: 0, host: "host.docker.internal:27017" },
-        { _id: 1, host: "host.docker.internal:27018" },
-        { _id: 2, host: "host.docker.internal:27019" }
-    ]
-})
-```
-
-### 6. Check Replica Set Status
-Verify replication setup with:
 ```sh
 rs.status()
 ```
 
-### 7. Check Secondary Replica Set
+### 5. Check Secondary Replica Set
 Verify secondary replication setup with:
 ```sh
 rs.printSecondaryReplicationInfo()
 ```
 
-### 8. Stop primary
+### 6. Stop primary
 Stopping the primary node which will triggers an automatic failover:
 ```sh
 docker stop mongo1
 ```
 ```sh
-docker exec -it mongo2 mongosh --port 27018
+docker exec -it mongo2 mongosh --host mongo2 --port 27018
 ```
 ```sh
 rs.status()
 ```
 
-### 9. Start mongo1 node
+### 7. Start mongo1 node
 Start `mongo1`, which will initially start as a secondary node.
 ```sh
 docker start mongo1
 ```
 
-### 10. Pull sample api
+### 8. Setup hosts and connect to db client
+```sh
+docker network inspect mongo-replica-net
+```
+Add the following entry to /etc/hosts to enable communication with Docker containers:
+```sh
+192.168.x.x mongo1
+192.168.x.x mongo2
+192.168.x.x mongo3
+```
+
+### 9. Pull sample api
 Pull the sample API to test reading from secondary nodes in a MongoDB replica set:
 ```sh
 docker pull toiart/replicate-sharding-app:1.0.0
@@ -103,10 +92,10 @@ docker pull toiart/replicate-sharding-app:1.0.0
 docker ps -a
 ```
 
-### 11. Configure Spring Boot to Use the Replica Set
+### 10. Configure Spring Boot to Use the Replica Set
 You can start application using Docker Compose with the following environment variables:
 ```sh
-SPRING_DATA_MONGODB_URI="mongodb://host.docker.internal:27017,host.docker.internal:27018,host.docker.internal:27019/product_db?replicaSet=rs0" docker-compose up -d
+SPRING_DATA_MONGODB_URI="mongodb://mongo1:27017,mongo2:27018,mongo3:27019/product_db?replicaSet=rs0" docker-compose up -d
 ```
 ```sh
 curl --location 'http://localhost:8080/orders/user1'
@@ -116,13 +105,13 @@ curl --location 'http://localhost:8080/orders/user1'
 Run the following commands to check the status of each MongoDB instance:
 
 ```sh
-mongostat --host 127.0.0.1:27017 -o=insert,query,update,delete
+mongostat --host mongo1:27017 -o=insert,query,update,delete
 ```
 ```sh
-mongostat --host 127.0.0.1:27018 -o=insert,query,update,delete
+mongostat --host mongo2:27018 -o=insert,query,update,delete
 ```
 ```sh
-mongostat --host 127.0.0.1:27019 -o=insert,query,update,delete
+mongostat --host mongo3:27019 -o=insert,query,update,delete
 ```
 
 ### 13. Simulate read from the primary node
@@ -137,7 +126,7 @@ docker stop replicate-sharding-app
 
 ### 15. Configure Spring Boot to read from Secondary Nodes
 ```sh
-SPRING_DATA_MONGODB_URI="mongodb://host.docker.internal:27017,host.docker.internal:27018,host.docker.internal:27019/product_db?replicaSet=rs0&readPreference=secondaryPreferred" docker-compose up -d
+SPRING_DATA_MONGODB_URI="mongodb://mongo1:27017,mongo2:27018,mongo3:27019/product_db?replicaSet=rs0&readPreference=secondaryPreferred" docker-compose up -d
 ```
 
 ### 16. Simulate read from the secondary node
