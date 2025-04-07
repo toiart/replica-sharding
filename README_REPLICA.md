@@ -39,10 +39,20 @@ docker run -d --name mongo3 --net mongo-replica-net -p 27019:27019 \
 mongo:8.0 --replSet rs0 --bind_ip_all --port 27019
 ```
 
-### 4. Check Replica Set Status
+### 4. Initial Replica Set
 Connect to the primary MongoDB instance and initiate the replica set:
 ```sh
 docker exec -it mongo1 mongosh --host mongo1 --port 27017
+```
+```sh
+rs.initiate({
+    _id: "rs0",
+    members: [
+        { _id: 0, host: "mongo1:27017" },
+        { _id: 1, host: "mongo2:27018" },
+        { _id: 2, host: "mongo3:27019" }
+    ]
+})
 ```
 ```sh
 rs.status()
