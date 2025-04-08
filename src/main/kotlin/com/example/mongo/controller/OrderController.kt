@@ -13,6 +13,14 @@ class OrderController(private val orderRepository: OrderRepository) {
         return orderRepository.save(order)
     }
 
+    @GetMapping
+    fun getOrders(): List<Order> {
+        return listOf(
+            Order(id = "1", userId = "userA", productId = "1"),
+            Order(id = "2", userId = "userB", productId = "2")
+        )
+    }
+
     @GetMapping("/{userId}")
     fun getOrdersByUser(@PathVariable userId: String): List<Order> {
         return orderRepository.findByUserId(userId)
