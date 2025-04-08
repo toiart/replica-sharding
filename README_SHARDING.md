@@ -65,7 +65,7 @@ rs.initiate({
   members: [
     { _id: 0, host: "shard1-1:27018", priority: 1 },
     { _id: 1, host: "shard1-2:27019", priority: 0.5 },
-    { _id: 2, host: "shard1-3:27020", priority: 0.7 }
+    { _id: 2, host: "shard1-3:27020", priority: 0.2 }
   ]
 });
 ```
