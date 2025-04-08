@@ -238,7 +238,11 @@ sh.shardCollection("product_db.products", { price: 1 })
 Set up range-based sharding by defining split points.
 ```sh
 sh.splitAt("product_db.products", { price: 100 })
+```
+```sh
 sh.splitAt("product_db.products", { price: 500 })
+```
+```sh
 sh.splitAt("product_db.products", { price: 1000 })
 ```
 
