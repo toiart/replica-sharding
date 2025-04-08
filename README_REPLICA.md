@@ -93,7 +93,7 @@ Add the following entry to /etc/hosts to enable communication with Docker contai
 ### 9. Pull sample api
 Pull the sample API to test reading from secondary nodes in a MongoDB replica set:
 ```sh
-docker pull toiart/replicate-sharding-app:1.0.1
+docker pull toiart/replicate-sharding-app:1.0.0
 ```
 ```sh
 docker ps -a

@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    image: toiart/replicate-sharding-app:1.0.1
+    image: toiart/replicate-sharding-app:1.0.0
     container_name: replicate-sharding-app
     environment:
       - SPRING_DATA_MONGODB_URI=${SPRING_DATA_MONGODB_URI}
