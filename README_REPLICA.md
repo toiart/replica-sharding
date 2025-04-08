@@ -95,9 +95,6 @@ Pull the sample API to test reading from secondary nodes in a MongoDB replica se
 ```sh
 docker pull toiart/replicate-sharding-app:1.0.0
 ```
-```sh
-docker ps -a
-```
 
 ### 10. Configure Spring Boot to Use the Replica Set
 You can start application using Docker Compose with the following environment variables:
