@@ -102,7 +102,7 @@ You can start application using Docker Compose with the following environment va
 SPRING_DATA_MONGODB_URI="mongodb://mongo1:27017,mongo2:27018,mongo3:27019/product_db?replicaSet=rs" docker-compose up -d
 ```
 ```sh
-curl --location 'http://localhost:8080/orders'
+curl --location 'http://localhost:8080/orders/user1'
 ```
 
 ### 12. Monitor MongoDB Instances
