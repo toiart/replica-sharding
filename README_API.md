@@ -12,7 +12,7 @@ curl --location 'http://localhost:8080/orders' \
 
 ## 2. Get Orders
 ```bash
-curl --location 'http://localhost:8080/orders'
+curl --location 'http://localhost:8080/orders/user1'
 ```
 
 ## 3. Create a Product

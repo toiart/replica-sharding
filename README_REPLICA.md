@@ -25,18 +25,15 @@ Run the following commands to start three MongoDB instances as replica set membe
 
 ```sh
 docker run -d --name mongo1 --net mongo-replica-net -p 27017:27017 \
--v mongo1_data:/data/db \
-mongo:8.0 --replSet rs0 --bind_ip_all --port 27017
+mongo:8.0 --replSet rs --bind_ip_all --port 27017
 ```
 ```sh
 docker run -d --name mongo2 --net mongo-replica-net -p 27018:27018 \
--v mongo2_data:/data/db \
-mongo:8.0 --replSet rs0 --bind_ip_all --port 27018
+mongo:8.0 --replSet rs --bind_ip_all --port 27018
 ```
 ```sh
 docker run -d --name mongo3 --net mongo-replica-net -p 27019:27019 \
--v mongo3_data:/data/db \
-mongo:8.0 --replSet rs0 --bind_ip_all --port 27019
+mongo:8.0 --replSet rs --bind_ip_all --port 27019
 ```
 
 ### 4. Initial Replica Set
@@ -46,7 +43,7 @@ docker exec -it mongo1 mongosh --host mongo1 --port 27017
 ```
 ```sh
 rs.initiate({
-    _id: "rs0",
+    _id: "rs",
     members: [
         { _id: 0, host: "mongo1:27017" },
         { _id: 1, host: "mongo2:27018" },
@@ -105,10 +102,10 @@ docker ps -a
 ### 10. Configure Spring Boot to Use the Replica Set
 You can start application using Docker Compose with the following environment variables:
 ```sh
-SPRING_DATA_MONGODB_URI="mongodb://mongo1:27017,mongo2:27018,mongo3:27019/product_db?replicaSet=rs0" docker-compose up -d
+SPRING_DATA_MONGODB_URI="mongodb://mongo1:27017,mongo2:27018,mongo3:27019/product_db?replicaSet=rs" docker-compose up -d
 ```
 ```sh
-curl --location 'http://localhost:8080/orders/user1'
+curl --location 'http://localhost:8080/orders'
 ```
 
 ### 12. Monitor MongoDB Instances
@@ -136,7 +133,7 @@ docker stop replicate-sharding-app
 
 ### 15. Configure Spring Boot to read from Secondary Nodes
 ```sh
-SPRING_DATA_MONGODB_URI="mongodb://mongo1:27017,mongo2:27018,mongo3:27019/product_db?replicaSet=rs0&readPreference=secondaryPreferred" docker-compose up -d
+SPRING_DATA_MONGODB_URI="mongodb://mongo1:27017,mongo2:27018,mongo3:27019/product_db?replicaSet=rs&readPreference=secondaryPreferred" docker-compose up -d
 ```
 
 ### 16. Simulate read from the secondary node

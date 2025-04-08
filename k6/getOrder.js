@@ -6,7 +6,7 @@ export let options = {
 };
 
 export default function () {
-    let res = http.get('http://localhost:8080/orders');
+    let res = http.get('http://localhost:8080/orders/user1');
     sleep(0.1);
 }
 
