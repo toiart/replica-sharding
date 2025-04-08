@@ -10,7 +10,7 @@ export let options = {
 
 export default function () {
   const randomProductName = `Product-${Math.random().toString(36).substring(7)}`;
-  const randomPrice = ((Math.random() * 1499) + 1).toFixed(2);
+  const randomPrice = (Math.random() < 0.3 ? (Math.random() * 100 + 1) : (Math.random() * 1399 + 101)).toFixed(2);
 
   let res = http.post('http://localhost:8080/products', JSON.stringify({
     name: randomProductName,

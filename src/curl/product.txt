@@ -1,8 +1,0 @@
-curl --location 'http://localhost:8080/products?minPrice=1000&maxPrice=1500'
-
-curl --location 'http://localhost:8080/products' \
---header 'Content-Type: application/json' \
---data '{
-  "name": "Power bank",
-  "price": 500
-}'

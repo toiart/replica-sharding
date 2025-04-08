@@ -1,8 +1,0 @@
-curl --location 'http://localhost:8080/orders/user1'
-
-curl --location 'http://localhost:8080/orders' \
---header 'Content-Type: application/json' \
---data '{
-    "userId": "user1",
-    "productId": "product1"
-}'
