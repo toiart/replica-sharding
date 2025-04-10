@@ -137,3 +137,20 @@ SPRING_DATA_MONGODB_URI="mongodb://mongo1:27017,mongo2:27018,mongo3:27019/produc
 ```sh
 k6 run getOrder.js
 ```
+
+### 17. Add one more replica set member
+```sh
+docker run -d --name mongo4 --net mongo-replica-net -p 27020:27020 \
+mongo:8.0 --replSet rs --bind_ip_all --port 27020
+```
+
+### 18. Add new replica set
+Connect to the primary MongoDB instance and add new replica set:
+```sh
+rs.add("mongo4:27020")
+```
+
+### 19. Update /etc/hosts
+```sh
+192.168.x.x mongo4
+```
