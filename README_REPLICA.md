@@ -155,9 +155,15 @@ rs.add("mongo4:27020")
 192.168.x.x mongo4
 ```
 
-# How to query data in oplog
-
+## How to query data in oplog
 ```sh
 use local
-db["oplog.rs"].find({ns: 'product_db.orders'}).sort({$natural: -1});
+db.oplog.rs.find({ns: 'product_db.orders'}).sort({$natural: -1});
 ```
+
+## How to check capped collection
+```sh
+use local
+db.oplog.rs.isCapped()
+```
+
