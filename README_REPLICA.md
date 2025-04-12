@@ -154,3 +154,10 @@ rs.add("mongo4:27020")
 ```sh
 192.168.x.x mongo4
 ```
+
+# How to query data in oplog
+
+```sh
+use local
+db["oplog.rs"].find({ns: 'product_db.orders'}).sort({$natural: -1});
+```
