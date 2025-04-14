@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  mongo1:
+    image: mongo:8.0
+    container_name: mongo1
+    ports:
+      - "27017:27017"
+    networks:
+      - mongo-replica-net
+    command: ["--replSet", "rs", "--bind_ip_all", "--port", "27017"]
+
+  mongo2:
+    image: mongo:8.0
+    container_name: mongo2
+    ports:
+      - "27018:27018"
+    networks:
+      - mongo-replica-net
+    command: ["--replSet", "rs", "--bind_ip_all", "--port", "27018"]
+
+  mongo3:
+    image: mongo:8.0
+    container_name: mongo3
+    ports:
+      - "27019:27019"
+    networks:
+      - mongo-replica-net
+    command: ["--replSet", "rs", "--bind_ip_all", "--port", "27019"]
+
+networks:
+  mongo-replica-net:
+    name: mongo-replica-net
+    driver: bridge
