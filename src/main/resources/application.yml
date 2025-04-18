@@ -1,6 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://127.0.0.1:27024/product_db
+#      uri: mongodb://127.0.0.1:27024/product_db
+      uri: mongodb://mongo1:27017,mongo2:27018,mongo3:27019/product_db?replicaSet=rs
 #      uri: mongodb://127.0.0.1:27017,127.0.0.1:27018,127.0.0.1:27019/product_db?replicaSet=rs0
 #      uri: mongodb://127.0.0.1:27017,127.0.0.1:27018,127.0.0.1:27019/product_db?replicaSet=rs0&readPreference=secondaryPreferred
